@@ -17,14 +17,17 @@
 #define BUFLEN 200
 #define MAXINPUTS 10
 
-typedef enum {INIT, END, STAR, NORM} rtype;
-
 typedef struct nfa_node {
-  rtype type;
-  char ch;
-  char next_ch;
-  struct nfa_node* next_node;
+  int end;
+  next_l_node* next_l;
 } nfa_node;
+
+typedef struct next_l_node {
+  int always;
+  char cond_ch;
+  nfa_node* node;
+  struct next_l_node* next;
+} next_l_node;
 
 typedef struct cnl_field {
   nfa_node* node;
@@ -98,10 +101,12 @@ int run_nfa(nfa_node* nfa_init, const char* regex, const char* text)
       next = tmp->next; // store next node of cnl here so that even after
                         // removing the current node we still progress with
                         // the correct next node
-      if (curr_node->type == END) {
+      if (curr_node->end) {
         free_cnl(cnl);
         return 1;
       }
+
+      // loop over all edges leading to next nodes
       if (char_match(curr_node->next_ch, text[0])) {
         cnl = insert_node_into_cnl(cnl, curr_node->next_node);
         if (curr_node->next_node->type == END) {
@@ -114,6 +119,31 @@ int run_nfa(nfa_node* nfa_init, const char* regex, const char* text)
           (curr_node->type == NORM)) {
         cnl = remove_node_from_cnl(cnl, tmp);
       }
+//       if (curr_node->type == INIT) {
+//         //fprintf(stderr, "init\n");
+//         if (char_match(curr_node->next_ch, text[0])) {
+//           cnl = insert_node_into_cnl(cnl, curr_node->next_node);
+//         }
+//         if (curr_node->ch == '^') {
+//           cnl = remove_node_from_cnl(cnl, tmp);
+//         } // otherwise stay at current node
+//       } else if (curr_node->type == END) {
+//         free_cnl(cnl);
+//         return 1;
+//       } else if (curr_node->type == STAR) {
+//         if (char_match(curr_node->next_ch, text[0])) {
+//           cnl = insert_node_into_cnl(cnl, curr_node->next_node);
+//         }
+//         // only get rid of current state if we can't go back to current state
+//         if (!(char_match(curr_node->ch, text[0]))) {
+//           cnl = remove_node_from_cnl(cnl, tmp);
+//         }
+//       } else if (curr_node->type = NORM) {
+//         if (char_match(curr_node->next_ch, text[0])) {
+//           cnl = insert_node_into_cnl(cnl, curr_node->next_node);
+//         }
+//         cnl = remove_node_from_cnl(cnl, tmp);
+//       }
     }
   } while (*(text++) != '\0' && cnl != NULL);
 
