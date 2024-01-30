@@ -5,6 +5,7 @@
  * - ^ for start of input
  * - $ for end of input
  * - * for 0 or more repetitions of previous character
+ * - () for grouping regular expressions
  *
  * This is implemented using a non-deterministic finite automaton, i.e. a
  * non-deterministic finite state machine
