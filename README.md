@@ -80,6 +80,8 @@ I observed this when comparing the performance against grep:
 * `126ms` for `cgrep '*.;$' cgrep.c` and
 * `3ms` for `grep '*.;$' cgrep.c`
 
+(Using the `time` command)
+
 ## Stage 4: Using a Deterministic Finite Automaton
 
 For this stage I converted the NFA from the previous stage to a DFA.
@@ -137,6 +139,8 @@ on the `cgrep.c` file from stage 3:
 * `126ms` for `3_nfa_more_regex/cgrep '*.;$' 3_nfa_more_regex/cgrep.c` and
 * `5ms` for `4_dfa_from_nfa/cgrep '*.;$' 3_nfa_more_regex/cgrep.c` and
 * `3ms` for `grep '*.;$' cgrep.c`
+
+(Using the `time` command)
 
 ## A note on automated testing
 
