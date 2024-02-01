@@ -358,7 +358,7 @@ nfa* generate_nfa(const char* regex) {
       regex_end = strstr(regex, ")");
       int size = regex_end - (regex + 1);
       left_regex = strndup(regex + 1, size);
-      left_regex[size-1] == '\0'; // remove trailing ')'
+      left_regex[size-1] = '\0'; // remove trailing ')'
     } else {
       regex_end = regex;
       left_regex = strndup(regex, 1); // this will just give the first
